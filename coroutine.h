@@ -38,7 +38,7 @@ namespace DC{
 
  class coroutine_able{
 
- 	COROUTINE_HANDLE handle;
+ 	COROUTINE_HANDLE _handle;
 private:
 	static void main (void* ud);
 public:
