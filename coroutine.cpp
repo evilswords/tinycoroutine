@@ -7,6 +7,7 @@
 #include <ucontext.h>
 #include <errno.h>
 #include <assert.h>
+#include <unistd.h>
 #include "coroutine.h"
 
 namespace DC{
@@ -488,6 +489,7 @@ coroutine_handle& coroutine_handle::operator =(const coroutine_handle& rhs){
 	if(&rhs!=this){
 		_cid=rhs.shift(this);
 	}
+	return *this;
 }
 
 void coroutine_handle::coroutine_release(){
