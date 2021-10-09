@@ -1,5 +1,5 @@
 DEBUG = -O1
-DEF = $(DEBUG) -D_REENTRANT_ -march=pentium -DCFIFO
+DEF = $(DEBUG) -D_REENTRANT_ -DCFIFO
 CPP = g++
 LD = g++
 INC = -I.
