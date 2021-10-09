@@ -1,6 +1,9 @@
 #include <iostream>
 #include <pthread.h>
 #include <list>
+#include <string.h>
+#include <algorithm>
+#include <signal.h>
 #include <ucontext.h>
 #include <errno.h>
 #include <assert.h>
