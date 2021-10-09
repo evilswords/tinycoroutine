@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <iostream>
 #include <sys/time.h>
+#include <string.h>
+#include <unistd.h>
 #include <set>
 #include "coroutine.h"
 
