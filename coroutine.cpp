@@ -21,39 +21,30 @@ enum CO_STATUS
 	COROUTINE_RUNNING,
 };
 
-#define MUTEX_SPIN_COUNT 50
-#define MUTEX_SPINSLEEP_DURATION 1001
-static inline int test_and_set(int *spin_lock)
-{
-	int ret;
-	__asm__ __volatile__(
-		"xchgl %0,%1"
-		: "=r"(ret),"=m" (*spin_lock)
-		: "0"(1),"m"(*spin_lock)
-		: "memory");
-
-	return ret;
-}
-
 void mutex_spin_lock(int * spin_lock)
 {
-	int cnt =0;
-	while( test_and_set(spin_lock)) {
-		if(cnt<MUTEX_SPIN_COUNT +1){
-			sched_yield();
-			cnt++;
-		}
-		else {
-			usleep(MUTEX_SPINSLEEP_DURATION);
-			cnt=1;
-		}
-		return;
-	}
+	register int tmp;
+	__asm__ __volatile__ (
+		"1: 		\n"
+		"	cmp	$1, %0 	\n"
+		"	je	2f	\n"
+		"	pause		\n"
+		"	jmp	1b	\n"
+		"2:		\n"
+		"	xor	%1, %1	\n"
+		"	xchg	%0, %1	\n"
+		"	test	%1, %1	\n"
+		"	je	1b	\n"
+		: "=m"(*spin_lock), "=r"(tmp)
+	);
 }
 
 void mutex_spinun_lock(int *spin_lock)
 {
-	*spin_lock = 0;
+	__asm__ __volatile__ (
+		"	movl $1, %0	\n"
+		: "=m"(*spin_lock)
+	);
 }
 
 struct spin_auto_lock
