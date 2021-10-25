@@ -32,8 +32,8 @@ void simple1(int thc,int cxc){
 		}
 		if(!cids[index]->resume()){
 			delete cids[index];
-			if(cxc != index+1)
-				memmove(&cids[index],&cids[index+1],sizeof(DC::COROUTINE_HANDLE)*(cxc-index));
+			--cxc;
+			memmove(&cids[index],&cids[index+1],sizeof(DC::COROUTINE_HANDLE)*(cxc-index));
 		}
 		else
 			++index;		
@@ -71,8 +71,8 @@ void simple2(int thc,int cxc){
 		}
 		if(!cids[index]->resume()){
 			delete cids[index];
-			if(cxc != index+1)
-				memmove(&cids[index],&cids[index+1],sizeof(test_cor_obj*)*(cxc-index));
+			--cxc;
+			memmove(&cids[index],&cids[index+1],sizeof(test_cor_obj*)*(cxc-index));
 		}
 		else
 			++index;		
