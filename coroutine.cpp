@@ -373,6 +373,9 @@ public:
 			cor->_env->add_pend(cor);
 			_yield_list.erase(iter);
 		}
+		else if(cor->_status==COROUTINE_INIT){
+			add_ready(cor);
+		}
 	}
 
 	void clear(){
@@ -544,8 +547,7 @@ void coroutine_able::main (void* ud){
 COROUTINE_HANDLE coroutine_new(coroutine_func func,void* ud){
 	coroutine* co=new coroutine(func,ud);
 	COROUTINE_HANDLE handle=new coroutine_handle((COROUTINE_ID)co);
-	co->attach(handle);
-	schedule::get_instance()->add_ready(co)
+	co->attach(handle);	
 	return handle;
 }
 
