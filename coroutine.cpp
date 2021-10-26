@@ -234,7 +234,9 @@ struct sandbox{
 		spin_auto_lock guard(_lock);
 		_pend_list.push_back(cor);
 #endif
+		_mutex.lock();
 		_condi.notify();
+		_mutex.unlock();
 		return cor;
 	}
 
@@ -449,8 +451,15 @@ static void *run_coroutine(void *param){
 				else if(cnt>3){
 					cnt=0;
 					env->_mutex.lock();
-					env->_condi.wait(env->_mutex);
-					env->_mutex.unlock();
+					coroutine*cor =env->pop_ready();
+					if(!cor){
+						env->_condi.wait(env->_mutex);
+						env->_mutex.unlock();
+					}
+					else{
+						env->_mutex.unlock();
+						env->resume(cor);
+					}
 				}
 				else{//for brocast wait event timing sequence bug
 					env->reclaim();
